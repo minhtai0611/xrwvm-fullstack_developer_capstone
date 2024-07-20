@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Best Cars Dealership</title>
+  <!-- Link the style sheets -->
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .contact-card {
+      width: 80%;
+      margin: 5% auto;
+      padding: 2%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .contact-info {
+      display: flex;
+      justify-content: space-between;
+    }
+    .contact-info div {
+      width: 45%;
+    }
+    .contact-info h3 {
+      margin-bottom: 15px;
+    }
+    .contact-info p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise; height: 1in;">
+    <div class="container-fluid">
+      <h2 style="padding-right: 5%;">Dealerships</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" style="font-size: larger;" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="contact-card">
+    <h1>Contact Us</h1>
+    <div class="contact-info">
+      <div>
+        <h3>Our Office</h3>
+        <p><strong>Address:</strong> 123 Main Street, Cityville, ST 12345</p>
+        <p><strong>Phone:</strong> (123) 456-7890</p>
+        <p><strong>Email:</strong> info@bestcars.com</p>
+      </div>
+      <div>
+        <h3>Business Hours</h3>
+        <p><strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM</p>
+        <p><strong>Saturday:</strong> 10:00 AM - 4:00 PM</p>
+        <p><strong>Sunday:</strong> Closed</p>
+      </div>
+    </div>
+    <h3>Contact Form</h3>
+    <form action="/send-message" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+  </div>
+  
+  <!-- Include Bootstrap JS for the navbar toggling functionality -->
+  <script src="/static/bootstrap.bundle.min.js"></script>
+</body>
+</html>
