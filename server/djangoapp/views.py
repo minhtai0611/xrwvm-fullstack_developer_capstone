@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.models import User
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -19,14 +20,12 @@ def get_cars(request):
             initiate()
         car_models = CarModel.objects.select_related('car_make')
         for car_model in car_models:
-            cars.append(
-                {
-                    "CarModel": car_model.name, 
-                    "CarMake": car_model.car_make.name
-                    }
-            )
-    except:
-        print("get_cars")
+            cars.append({
+                "CarModel": car_model.name, 
+                "CarMake": car_model.car_make.name
+            })
+    except Exception as e:
+        logger.error(f"Error in get_cars: {e}")
     return JsonResponse({"CarModels": cars})
 
 # Create a `login_request` view to handle sign in request
@@ -36,17 +35,16 @@ def login_user(request):
     username = data['userName']
     password = data['password']
     user = authenticate(username=username, password=password)
-    data = {"userName": username}
+    response_data = {"userName": username}
     if user is not None:
         login(request, user)
-        data = {"userName": username, "status": "Authenticated"}
-    return JsonResponse(data)
+        response_data = {"userName": username, "status": "Authenticated"}
+    return JsonResponse(response_data)
 
 # Create a `logout_request` view to handle sign out request
 def logout_request(request):
     logout(request)
-    data = {"userName": ""}
-    return JsonResponse(data)
+    return JsonResponse({"userName": ""})
 
 # Create a `registration` view to handle sign up request
 @csrf_exempt
@@ -62,11 +60,11 @@ def registration(request):
     try:
         User.objects.get(username=username)
         username_exist = True
-    except:
-        logger.debug("{} is new user".format(username))
+    except User.DoesNotExist:
+        logger.debug(f"{username} is a new user")
 
     if not username_exist:
-        User.objects.create_user(
+        user = User.objects.create_user(
             username=username,
             first_name=first_name,
             last_name=last_name,
@@ -74,11 +72,9 @@ def registration(request):
             email=email
         )
         login(request, user)
-        data = {"userName": username, "status": "Authenticated"}
-        return JsonResponse(data)
+        return JsonResponse({"userName": username, "status": "Authenticated"})
     else:
-        data = {"userName": username, "error": "Already Registered"}
-        return JsonResponse(data)
+        return JsonResponse({"userName": username, "error": "Already Registered"})
 
 # Update the `get_dealerships` view to render the index page with 
 # a list of dealerships
@@ -115,7 +111,8 @@ def add_review(request):
         try:
             post_review(data)
             return JsonResponse({"status": 200})
-        except:
+        except Exception as e:
+            logger.error(f"Error in add_review: {e}")
             return JsonResponse({"status": 401, "message": "Error in posting review"})
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
