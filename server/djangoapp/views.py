@@ -24,7 +24,7 @@ def get_cars(request):
         car_models = CarModel.objects.select_related("car_make")
         for car_model in car_models:
             cars.append({
-                "CarModel": car_model.name, 
+                "CarModel": car_model.name,
                 "CarMake": car_model.car_make.name
             })
     except Exception as e:
@@ -79,11 +79,14 @@ def registration(request):
         )
         login(request, user)
         return JsonResponse({
-            "userName": username, 
+            "userName": username,
             "status": "Authenticated"
         })
     else:
-        return JsonResponse({"userName": username, "error": "Already Registered"})
+        return JsonResponse({
+            "userName": username,
+            "error": "Already Registered"
+        })
 
 
 # Update the `get_dealerships` view to render the index page with
@@ -127,7 +130,7 @@ def add_review(request):
         except Exception as e:
             logger.error(f"Error in add_review: {e}")
             return JsonResponse({
-                "status": 401, 
+                "status": 401,
                 "message": "Error in posting review"
             })
     else:
