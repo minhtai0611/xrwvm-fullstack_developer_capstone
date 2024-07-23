@@ -13,6 +13,7 @@ from .restapis import analyze_review_sentiments, get_request, post_review
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 # Create your views here.
 def get_cars(request):
     try:
@@ -22,9 +23,10 @@ def get_cars(request):
             initiate()
         car_models = CarModel.objects.select_related("car_make")
         for car_model in car_models:
-            cars.append(
-                {"CarModel": car_model.name, "CarMake": car_model.car_make.name}
-            )
+            cars.append({
+                "CarModel": car_model.name, 
+                "CarMake": car_model.car_make.name
+            })
     except Exception as e:
         logger.error(f"Error in get_cars: {e}")
     return JsonResponse({"CarModels": cars})
@@ -76,7 +78,10 @@ def registration(request):
             email=email,
         )
         login(request, user)
-        return JsonResponse({"userName": username, "status": "Authenticated"})
+        return JsonResponse({
+            "userName": username, 
+            "status": "Authenticated"
+        })
     else:
         return JsonResponse({"userName": username, "error": "Already Registered"})
 
@@ -121,6 +126,9 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except Exception as e:
             logger.error(f"Error in add_review: {e}")
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+            return JsonResponse({
+                "status": 401, 
+                "message": "Error in posting review"
+            })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
