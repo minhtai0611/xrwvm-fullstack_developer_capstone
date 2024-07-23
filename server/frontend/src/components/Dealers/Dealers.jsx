@@ -14,6 +14,21 @@ const Dealers = () => {
   
   let dealer_url_by_state = "/djangoapp/get_dealers/";
  
+  const [searchQuery, setSearchQuery] = useState('');
+const [originalDealers, setOriginalDealers] = useState([]);
+const handleInputChange = (event) => {
+const query = event.target.value;
+setSearchQuery(query);
+const filtered = originalDealers.filter(dealer =>
+  dealer.state.toLowerCase().includes(query.toLowerCase())
+);
+setDealersList(filtered);
+};
+const handleLostFocus = () => {
+if (!searchQuery) {
+  setDealersList(originalDealers);
+}
+}
   const filterDealers = async (state) => {
     dealer_url_by_state = dealer_url_by_state+state;
     const res = await fetch(dealer_url_by_state, {
@@ -39,6 +54,7 @@ const Dealers = () => {
       });
 
       setStates(Array.from(new Set(states)))
+      setOriginalDealers(all_dealers);
       setDealersList(all_dealers)
     }
   }
@@ -60,13 +76,7 @@ return(
       <th>Address</th>
       <th>Zip</th>
       <th>
-      <select name="state" id="state" onChange={(e) => filterDealers(e.target.value)}>
-      <option value="" selected disabled hidden>State</option>
-      <option value="All">All States</option>
-      {states.map(state => (
-          <option value={state}>{state}</option>
-      ))}
-      </select>        
+      <input type="text" placeholder="Search states..." onChange={handleInputChange} onBlur={handleLostFocus} value={searchQuery} />        
 
       </th>
       {isLoggedIn ? (
